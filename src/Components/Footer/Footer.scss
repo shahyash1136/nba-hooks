@@ -1,0 +1,12 @@
+@import "../../scss/variables";
+@import "../../scss/mixin";
+.footer {
+    &__top {
+        height: 156px;
+        background-color: $primary;
+    }
+    &__bottom {
+        height: 40px;
+        background-color: $complementray;
+    }
+}
