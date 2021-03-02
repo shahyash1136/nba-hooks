@@ -6,7 +6,7 @@ const Team = ({ teamData }) => {
     name = name.replace(/\s+/g, '-').toLowerCase();
     return (
 
-        <div className="club" data-conference={teamData.conference}>
+        <div className="club" data-conference={teamData.conference.toLowerCase()}>
             <NavLink to={`/team/${name}/${teamData.id}/`} className="club__container">
                 <div className="club__logo">
                     <img

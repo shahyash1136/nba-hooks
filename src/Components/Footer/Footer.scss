@@ -8,5 +8,17 @@
     &__bottom {
         height: 40px;
         background-color: $complementray;
+        p {
+            margin: 0px;
+            text-align: center;
+            height: 100%;
+            @extend %flexbox;
+            justify-content: center;
+            align-items: center;
+            color: $white;
+            text-transform: uppercase;
+            font-family: $medium_font-family_secondary;
+            font-weight: $medium_font-weight;
+        }
     }
 }
