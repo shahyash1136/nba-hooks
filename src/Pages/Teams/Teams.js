@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { TeamsContext } from '../../Context/TeamsContext/TeamsContext';
+import { TeamsContext } from '../../Context/Context/TeamsContext';
 import Team from "../../Components/Team/Team";
 import Loader from '../../Components/Loader/Loader';
 import Tabs from '../../Components/Tabs/Tabs';
@@ -29,7 +29,7 @@ const Teams = () => {
     }
 
     let tabMarkup = conferenceData.map(el => {
-        return <Tabs tabValue={el.name} tabDataValue={el.confer} activeTab={conference} tabClick={() => tabClick(el.confer)} />
+        return <Tabs key={el.confer} tabValue={el.name} tabDataValue={el.confer} activeTab={conference} tabClick={() => tabClick(el.confer)} />
     })
 
     return (

@@ -1,6 +1,6 @@
 import { GET__AVERAGE, GET__GAMES, GET__PLAYERS, GET__STATS, GET__TEAMS } from "./action.type";
 
-export default (state, action) => {
+export default function (state, action) {
     switch (action.type) {
         case GET__TEAMS:
             return action.payload;
