@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { PlayersContext } from '../../Context/Context/PlayersContext';
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from "react-router-dom";
 import Player from '../../Components/Player/Player';
 import Loader from "../../Components/Loader/Loader";
 import axios from "axios";
@@ -8,49 +7,71 @@ import { baseUrl, endpoints } from "../../API/index";
 import './Players.scss';
 
 const Players = (props) => {
-    const { playersList } = useContext(PlayersContext);
 
-    const [playersData, setPlayersData] = useState({});
+    let markup, prevDisable, nextDisable, histoy;
 
+    histoy = useHistory();
+
+    const [playersData, setPlayersData] = useState(null);
     const [prevPage, setPrevPage] = useState('');
     const [nextPage, setNextPage] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [loader, setLoader] = useState(false);
+    const [search, setSearch] = useState('');
 
-
-    const { data } = playersData;
-
-
-    const nextPageData = async () => {
-        const res = await axios.get(`${baseUrl}/${endpoints.players}?per_page=50&page=${props.match.params.pageNo}`);
-        const { data } = res;
-        setPlayersData(data);
+    const playerJsonData = async () => {
         setNextPage(Number(props.match.params.pageNo) + 1);
-    }
-    const prevPageData = async () => {
-        const res = await axios.get(`${baseUrl}/${endpoints.players}?per_page=50&page=${props.match.params.pageNo}`);
-        const { data } = res;
-
-        setPlayersData(data);
         setPrevPage(Number(props.match.params.pageNo) - 1);
+        setCurrentPage(props.match.params.pageNo);
+        try {
+            await axios.get(`${baseUrl}/${endpoints.players}?per_page=40&page=${props.match.params.pageNo}`)
+                .then(res => {
+                    setPlayersData(res.data);
+                });
+            setLoader(true);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
+    const playerSearchData = async () => {
+        setNextPage(Number(props.match.params.pageNo) + 1);
+        setPrevPage(Number(props.match.params.pageNo) - 1);
+        setCurrentPage(props.match.params.pageNo);
+        try {
+            await axios.get(`${baseUrl}/${endpoints.players}?per_page=40&page=${props.match.params.pageNo}&search=${search}`)
+                .then(res => {
+                    setPlayersData(res.data);
+                });
+            setLoader(true);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
-
-
-    /* const { next_page } = meta; */
     useEffect(() => {
-        setPlayersData(playersList);
-        nextPageData()
-        prevPageData()
-    }, [playersData])
+        setLoader(false);
+        if (search === '') {
+            playerJsonData();
+        } else {
+            playerSearchData();
+        }
+    }, [prevPage, nextPage, search])
+
+    /*     useEffect(() => {
+            setLoader(false);
+        }, [prevPage, nextPage, search]) */
 
 
-    let markup;
-    if (!data) {
-        markup = <Loader />
-    } else {
+    if (loader) {
+        const { data, meta } = playersData;
         markup = data.map(player => {
             return <Player playerData={player} key={player.id} />
         })
+        prevDisable = Number(currentPage) !== 1 ? '' : 'disable';
+        nextDisable = meta.next_page !== null ? '' : 'disable';
+    } else {
+        markup = <Loader />
     }
 
 
@@ -59,15 +80,15 @@ const Players = (props) => {
             <div className="main__container">
                 <div className="top">
                     <div className="btnBox pagination">
-                        <NavLink to={`/players/${prevPage}`} className="btn btnPre" data-btn="pre">
+                        <Link to={`/players/${prevPage}`} onClick={() => setPrevPage(prevPage - 1)} className={`btn btnPre ${prevDisable}`}>
                             <span>Previous</span>
-                        </NavLink>
-                        <NavLink to={`/players/${nextPage}`} className="btn btnNext" data-btn="next">
+                        </Link>
+                        <Link to={`/players/${nextPage}`} onClick={() => setNextPage(nextPage + 1)} className={`btn btnNext ${nextDisable}`}>
                             <span>Next</span>
-                        </NavLink>
+                        </Link>
                     </div>
                     <div className="searchBox">
-                        <input type="text" name="" className="searchPlayer" />
+                        <input type="text" name="" className="searchPlayer" onChange={(e) => setSearch(e.target.value)} />
                     </div>
                 </div>
                 <div className="playersList__container">

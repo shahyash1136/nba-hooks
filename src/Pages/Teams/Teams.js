@@ -9,18 +9,19 @@ const Teams = () => {
     const { teamsList } = useContext(TeamsContext);
     const { data } = teamsList;
     const [conference, setConference] = useState('west');
-    const [conferenceData, setConferenceData] = useState([
-        { name: 'West Conference', confer: 'west' },
-        { name: 'East Conference', confer: 'east' },]);
+    const conferenceData = [{ name: 'West Conference', confer: 'west' },
+    { name: 'East Conference', confer: 'east' },];
 
     let markup;
     if (data === undefined) {
         markup = <Loader />
     } else {
         markup = data.map(team => {
+            let teamMarkup;
             if (conference === team.conference.toLowerCase()) {
-                return <Team teamData={team} key={team.id} />
+                teamMarkup = <Team teamData={team} key={team.id} />
             }
+            return teamMarkup;
         })
     }
 
