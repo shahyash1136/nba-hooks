@@ -8,9 +8,9 @@ import PlayersReducer from "../Context/Reducer/PlayersReducer";
 import { GET__TEAMS } from "../Context/action.type";
 import { Switch, Route } from "react-router-dom";
 import Home from "./Home/Home";
-import Players from "./Players/Players";
 import Teams from "./Teams/Teams";
-/* import Games from "./Games/Games"; */
+import Players from "./Players/Players";
+import PlayerProfile from "./PlayerProfile/PlayerProfile";
 import Header from "../Components/Header/Header";
 import Footer from "../Components/Footer/Footer";
 
@@ -47,6 +47,7 @@ const Layout = () => {
                                 <Route exact path='/' component={Home} />
                                 <Route path='/teams' component={Teams} />
                                 <Route path='/players/:pageNo' component={Players} />
+                                <Route path='/player/:playerName/:player_ids' component={PlayerProfile} />
                             </Switch>
                         </section>
                     </PlayersContext.Provider>

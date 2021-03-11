@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Player from '../../Components/Player/Player';
 import Loader from "../../Components/Loader/Loader";
 import axios from "axios";
@@ -8,9 +8,9 @@ import './Players.scss';
 
 const Players = (props) => {
 
-    let markup, prevDisable, nextDisable, histoy;
+    let markup, prevDisable, nextDisable;
 
-    histoy = useHistory();
+
 
     const [playersData, setPlayersData] = useState(null);
     const [prevPage, setPrevPage] = useState('');
@@ -57,10 +57,6 @@ const Players = (props) => {
             playerSearchData();
         }
     }, [prevPage, nextPage, search])
-
-    /*     useEffect(() => {
-            setLoader(false);
-        }, [prevPage, nextPage, search]) */
 
 
     if (loader) {
